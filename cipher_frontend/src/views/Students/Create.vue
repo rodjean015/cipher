@@ -30,11 +30,11 @@
                     <label for="">Phone</label>
                     <input type="text" class="form-control" v-model="model.student.phone" />
                 </div>
-                <div class="mb-3">
-                    <button type="button" @click="submitStudent" class="btn btn-success">Submit</button>
-                    <RouterLink to="/students/view" class="btn btn-dark">
-                        Go Back
-                    </RouterLink>   
+                <div class="mb-3 d-flex gap-2">
+                    <button type="button" @click="submitStudent" class="btn btn-success btn-sm"><span class="material-symbols-outlined">save</span></button>
+                    <router-link to="/students/view" class="btn btn-dark btn-sm">
+                        <span class="material-symbols-outlined">list</span>
+                    </router-link>   
                 </div>
             </div>
         </div>
@@ -62,7 +62,6 @@ export default {
     },
     methods: {
         submitStudent() {
-            var mythis = this;
             axios.post('http://127.0.0.1:8000/api/students', this.model.student)
                 .then(res => {
                     console.log(res.data);
@@ -74,14 +73,14 @@ export default {
                         email: '',
                         phone: '',
                     }
-                    this.errorList = '';
+                    this.errorList = {}; // Reset errorList to an empty object
+                    this.$router.push('/students/view'); // Use router to navigate
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    if (error.response) {
-                        if (error.response.status == 422) {
-                            mythis.errorList = error.response.data.errors;
-                        }
+                    if (error.response && error.response.status == 422) {
+                        this.errorList = error.response.data.errors;
+                        console.log(error.request);
                     } else if (error.request) {
                         console.log(error.request);
                     } else {

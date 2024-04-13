@@ -1,50 +1,50 @@
 <template>
-  <div class="container">
+  <div class="container mt-5">
     <div class="card">
-    <div class="card-header">
-      <h4>
-        Students
-        <RouterLink to="/students/create" class="btn btn-primary float-end">
-          Add Student
-        </RouterLink>
-      </h4>
+      <div class="card-header">
+        <h4>
+          Students
+          <RouterLink to="/students/create" class="btn btn-primary float-end">
+            Add Student
+          </RouterLink>
+        </h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Firstname</th>
+              <th>Lastname</th>
+              <th>Course</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody v-if="this.students.length > 0">
+            <tr v-for="student in students" :key="index">
+              <td>{{ student.id }}</td>
+              <td>{{ student.firstname }}</td>
+              <td>{{ student.lastname }}</td>
+              <td>{{ student.course }}</td>
+              <td>{{ student.email }}</td>
+              <td>{{ student.phone }}</td>
+              <!-- Add action buttons here -->
+              <td class="d-flex gap-2">
+                <RouterLink :to="{ path: '/students/'+student.id+'/edit'}" class="btn btn-outline-dark btn-sm"><span class="material-symbols-outlined">edit_square</span></RouterLink>
+                <button @click="deleteStudent(student.id)" class="btn btn-outline-danger btn-sm"><span class="material-symbols-outlined">delete</span></button>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="7">Loading.....</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="card-body">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Course</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody v-if="this.students.length > 0">
-          <tr v-for="student in students" :key="index">
-            <td>{{ student.id }}</td>
-            <td>{{ student.firstname }}</td>
-            <td>{{ student.lastname }}</td>
-            <td>{{ student.course }}</td>
-            <td>{{ student.email }}</td>
-            <td>{{ student.phone }}</td>
-            <!-- Add action buttons here -->
-            <td class="d-flex gap-2">
-              <RouterLink :to="{ path: '/students/'+student.id+'/edit'}" class="btn btn-outline-dark btn-sm"><span class="material-symbols-outlined">edit_square</span></RouterLink>
-              <button @click="deleteStudent(student.id)" class="btn btn-outline-secondary btn-sm"><span class="material-symbols-outlined">person_remove</span></button>
-            </td>
-          </tr>
-        </tbody>
-        <tbody v-else>
-          <tr>
-            <td colspan="7">Loading.....</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
   </div>
 </template>
 

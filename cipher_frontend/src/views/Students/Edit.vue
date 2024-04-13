@@ -30,11 +30,11 @@
                     <label for="">Phone</label>
                     <input type="text" class="form-control" v-model="model.student.phone" />
                 </div>
-                <div class="mb-3">
-                    <button type="button" @click="updateStudent" class="btn btn-success">Update</button>
-                    <RouterLink to="/students/view" class="btn btn-dark">
-                        Go Back
-                    </RouterLink>   
+                <div class="mb-3 d-flex gap-2">
+                    <button type="button" @click="updateStudent" class="btn btn-success btn-sm"><span class="material-symbols-outlined">save</span></button>
+                    <router-link to="/students/view" class="btn btn-dark btn-sm">
+                        <span class="material-symbols-outlined">list</span>
+                    </router-link>   
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
 import axios from 'axios'
 
 export default {
-    name: 'studentCreate',
+    name: 'StudentEdit',
     data() {
         return {
             studentID: '',
@@ -61,49 +61,36 @@ export default {
             }
         };
     },
-    mounted(){
-
+    mounted() {
         this.studentID = this.$route.params.id;
-        this.getStudentData(this.$route.params.id);
+        this.getStudentData(this.studentID);
     },
-
     methods: {
-
-        getStudentData(studentID){
-
+        getStudentData(studentID) {
             axios.get(`http://127.0.0.1:8000/api/students/${studentID}/edit`)
-            .then(res => {
-                console.log(res.data.student);
-
-                this.model.student = res.data.student
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                if (error.response) {
-                    if (error.response.status == 404) {
-                        
+                .then(res => {
+                    this.model.student = res.data.student;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    if (error.response && error.response.status == 404) {
                         alert(error.response.data.message);
-                        
+                        this.$router.push('/students/view');
                     }
-                }
-            });
+                });
         },
-
-
         updateStudent() {
-            var mythis = this;
             axios.put(`http://127.0.0.1:8000/api/students/${this.studentID}/edit`, this.model.student)
                 .then(res => {
                     console.log(res.data);
                     alert(res.data.message);
-                    
-                    this.errorList = '';
+                    this.errorList = {};
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     if (error.response) {
                         if (error.response.status == 422) {
-                            mythis.errorList = error.response.data.errors;
+                            this.errorList = error.response.data.errors;
                         }
                         if (error.response.status == 404) {
                             alert(error.response.data.message);

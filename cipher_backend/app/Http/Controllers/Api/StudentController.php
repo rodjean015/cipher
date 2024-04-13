@@ -38,7 +38,7 @@ class StudentController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
-                'errors' => $validator->errors()->all() // Use errors() method to retrieve validation errors
+                'errors' => $validator->errors()
             ], 422);
         } else {
             $student = Student::create([
@@ -112,7 +112,7 @@ class StudentController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
-                'errors' => $validator->errors()->all() // Use errors() method to retrieve validation errors
+                'errors' => $validator->errors()
             ], 422);
         } else {
             $student = Student::find($id);
